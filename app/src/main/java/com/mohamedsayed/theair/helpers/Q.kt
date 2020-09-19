@@ -7,6 +7,7 @@ object Q {
 
     const val BASE_API = "https://api.themoviedb.org/3/"
 
+    const val GET_GUEST_SESSION_ID_API = "authentication/guest_session/new"
     const val GET_LATEST_TV_SHOWS_API = "tv/top_rated"
     const val GET_TV_SHOW_DETAILS_API = "tv/{tv_id}"
     const val RATE_TV_SHOW_API = "tv/{tv_id}/rating"

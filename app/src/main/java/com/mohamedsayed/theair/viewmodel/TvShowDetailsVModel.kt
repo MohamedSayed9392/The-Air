@@ -1,5 +1,7 @@
 package com.mohamedsayed.theair.viewmodel
 
+import DefaultResponse
+import GuestSession
 import TvShowDetails
 import TvShowResults
 import androidx.lifecycle.LiveData
@@ -11,15 +13,23 @@ import com.mohamedsayed.theair.model.network.RetrofitService
 
 class TvShowDetailsVModel(val apiService: ApiService) : ViewModel() {
 
+    var getTvShowDetails: LiveData<ApiResponse<TvShowDetails>>? = null
     fun getTvShowDetails(tv_id: Int): LiveData<ApiResponse<TvShowDetails>> {
-        return apiService.getTvShowDetails(tv_id)
+        getTvShowDetails = apiService.getTvShowDetails(tv_id)
+        return getTvShowDetails!!
     }
 
-    fun rateTvShow(tv_id: Int,value:Double): LiveData<ApiResponse<String>> {
-        return apiService.rateTvShow(tv_id,value)
+    var rateTvShow: LiveData<ApiResponse<DefaultResponse>>? = null
+    fun rateTvShow(tv_id: Int, value: Double,guest_session_id:String): LiveData<ApiResponse<DefaultResponse>> {
+        val body = HashMap<String,Any>()
+        body["value"] = value
+        rateTvShow = apiService.rateTvShow(tv_id,body, guest_session_id)
+        return rateTvShow!!
     }
 
+    var getTvShowSimilar: LiveData<ApiResponse<TvShowResults>>? = null
     fun getTvShowSimilar(tv_id: Int): LiveData<ApiResponse<TvShowResults>> {
-        return apiService.getTvShowSimilar(tv_id)
+        getTvShowSimilar = apiService.getTvShowSimilar(tv_id)
+        return getTvShowSimilar!!
     }
 }

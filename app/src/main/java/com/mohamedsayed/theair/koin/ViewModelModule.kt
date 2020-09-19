@@ -1,6 +1,7 @@
 package com.nahdetmisr.adwaa.refator.koin
 
 import com.mohamedsayed.theair.viewmodel.LatestViewModel
+import com.mohamedsayed.theair.viewmodel.MainViewModel
 import com.mohamedsayed.theair.viewmodel.TvShowDetailsVModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -11,5 +12,8 @@ val viewModel = module {
     }
     viewModel {
         TvShowDetailsVModel(get())
+    }
+    single {
+        MainViewModel(get())
     }
 }

@@ -9,7 +9,9 @@ import com.mohamedsayed.theair.model.network.ApiService
 
 class LatestViewModel(val apiService: ApiService) : ViewModel() {
 
+    var getLatestTvShows: LiveData<ApiResponse<TvShowResults>>? = null
     fun getLatestTvShows(): LiveData<ApiResponse<TvShowResults>> {
-        return apiService.getLatestTvShows(1)
+        getLatestTvShows = apiService.getLatestTvShows(1)
+        return getLatestTvShows!!
     }
 }

@@ -1,6 +1,8 @@
 package com.mohamedsayed.theair.view.details
 
 import CreatedBy
+import DefaultResponse
+import GuestSession
 import Networks
 import TvShowDetails
 import android.app.Activity
@@ -11,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -30,11 +33,13 @@ import com.mohamedsayed.theair.model.network.Status
 import com.mohamedsayed.theair.model.objects.TvShow
 import com.mohamedsayed.theair.view.MainActivity
 import com.mohamedsayed.theair.view.latest.LatestAdapter
+import com.mohamedsayed.theair.viewmodel.MainViewModel
 import com.mohamedsayed.theair.viewmodel.TvShowDetailsVModel
 import kotlinx.android.synthetic.main.tv_show_details.*
 import kotlinx.android.synthetic.main.tv_shows_item_list.*
 import kotlinx.android.synthetic.main.layout_recycler.*
 import kotlinx.android.synthetic.main.layout_recycler_2.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowDetailsFragment : Fragment() {
@@ -42,6 +47,7 @@ class TvShowDetailsFragment : Fragment() {
     var TAG = "TvShowDetailsFragment"
 
     val tvShowDetailsVModel : TvShowDetailsVModel by viewModel()
+    val mainViewModel : MainViewModel by inject()
 
     var tvShowId:Int = -1
 
@@ -59,6 +65,39 @@ class TvShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getTvShowDetails()
+
+        tvSdRatingBar.setOnRatingBarChangeListener { _, fl, _ ->
+            rateTvShow(fl.toDouble(),mainViewModel.getGuestSessionId!!.value!!.data!!.id)
+        }
+    }
+
+    var observerRate : Observer <ApiResponse<DefaultResponse>>? = null
+    private fun rateTvShow(value:Double,guest_session_id:String){
+        observerRate = Observer <ApiResponse<DefaultResponse>>{
+            when(it.status){
+                Status.LOADING ->{
+                    Log.d(TAG,"Status.LOADING")
+                    tvSdProgressBar.visibility = View.VISIBLE
+                }
+                Status.EMPTY ->{
+                    Log.d(TAG,"Status.EMPTY")
+                    tvSdProgressBar.visibility = View.GONE
+                }
+                Status.SUCCESS ->{
+                    Log.d(TAG,"Status.SUCCESS")
+                    tvSdProgressBar.visibility = View.GONE
+                    Toast.makeText(mContext!!,getString(R.string.rated_successfully),Toast.LENGTH_LONG).show()
+                }
+                Status.ERROR ->{
+                    Log.d(TAG,"Status.ERROR")
+                    tvSdProgressBar.visibility = View.GONE
+                    Toast.makeText(mContext!!,getString(R.string.try_again),Toast.LENGTH_LONG).show()
+                    tvShowDetailsVModel.rateTvShow!!.removeObserver(observerRate!!)
+                }
+            }
+        }
+
+        tvShowDetailsVModel.rateTvShow(tvShowId,value,guest_session_id).observe(viewLifecycleOwner, observerRate!!)
     }
 
     var observer : Observer <ApiResponse<TvShowDetails>>? = null
@@ -68,10 +107,6 @@ class TvShowDetailsFragment : Fragment() {
                 Status.LOADING ->{
                     Log.d(TAG,"Status.LOADING")
                     tvSdProgressBar.visibility = View.VISIBLE
-                }
-                Status.STOP ->{
-                    Log.d(TAG,"Status.STOP")
-                    tvSdProgressBar.visibility = View.GONE
                 }
                 Status.EMPTY ->{
                     Log.d(TAG,"Status.EMPTY")

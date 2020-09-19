@@ -23,13 +23,11 @@ class LiveDataCallAdapter<T>(private val responseType: Type):
 
             override fun onInactive() {
                 super.onInactive()
-                postValue(ApiResponse.stop())
                 dequeue()
             }
 
             private fun dequeue() {
                 if (call.isExecuted) {
-                    postValue(ApiResponse.stop())
                     call.cancel()
                 }
             }
@@ -41,7 +39,11 @@ class LiveDataCallAdapter<T>(private val responseType: Type):
                     }
 
                     override fun onResponse(call: Call<T>, response: Response<T>) {
-                        postValue(ApiResponse.success(response.body()))
+                        if(response.code() == 200 || response.code() == 201) {
+                            postValue(ApiResponse.success(response.body()))
+                        }else{
+                            postValue(ApiResponse.error())
+                        }
                         isSuccess = true
                     }
                 })

@@ -26,11 +26,5 @@ data class ApiResponse<out T>(var status: Status, val data: T? = null) {
                 Status.EMPTY
             )
         }
-
-        fun <T> stop(): ApiResponse<T> {
-            return ApiResponse(
-                Status.STOP
-            )
-        }
     }
 }

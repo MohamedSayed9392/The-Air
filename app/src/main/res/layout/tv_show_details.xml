@@ -59,6 +59,12 @@
                 tools:text="Avengers"
                 android:textColor="@android:color/black"
                 android:background="@color/colorAccent"/>
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1"
+                android:id="@+id/tvSdRatingBar"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,6 +186,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     layout="@layout/layout_recycler_2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/similar_tv_shows"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"/>
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    layout="@layout/layout_recycler_3"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

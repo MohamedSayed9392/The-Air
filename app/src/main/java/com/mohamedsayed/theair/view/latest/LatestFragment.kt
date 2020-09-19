@@ -1,5 +1,6 @@
 package com.nahdetmisr.adwaa.view.dashboard.fragments
 
+import GuestSession
 import TvShowResults
 import android.app.Activity
 import android.content.Context
@@ -20,7 +21,10 @@ import com.mohamedsayed.theair.view.MainActivity
 import com.mohamedsayed.theair.view.details.TvShowDetailsFragment
 import com.mohamedsayed.theair.view.latest.LatestAdapter
 import com.mohamedsayed.theair.viewmodel.LatestViewModel
+import com.mohamedsayed.theair.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.layout_recycler.*
+import kotlinx.android.synthetic.main.tv_show_details.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LatestFragment : Fragment() {
@@ -28,6 +32,7 @@ class LatestFragment : Fragment() {
     var TAG = "LatestFragment"
 
     val latestViewModel : LatestViewModel by viewModel()
+    val mainViewModel : MainViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +45,38 @@ class LatestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fabRefresh.setOnClickListener { getLatestTvShows() }
+        getGuestSessionId()
+    }
 
-        getLatestTvShows()
+    var observerGuestSession : Observer <ApiResponse<GuestSession>>? = null
+    private fun getGuestSessionId(){
+        observerGuestSession = Observer <ApiResponse<GuestSession>>{
+            when(it.status){
+                Status.LOADING ->{
+                    Log.d(TAG,"Status.LOADING")
+                    progressBar.visibility = View.VISIBLE
+                    fabRefresh.visibility = View.GONE
+                }
+                Status.EMPTY ->{
+                    Log.d(TAG,"Status.EMPTY")
+                    progressBar.visibility = View.GONE
+                }
+                Status.SUCCESS ->{
+                    Log.d(TAG,"Status.SUCCESS")
+                    progressBar.visibility = View.GONE
+                    getLatestTvShows()
+                }
+                Status.ERROR ->{
+                    Log.d(TAG,"Status.ERROR")
+                    progressBar.visibility = View.GONE
+                    fabRefresh.visibility = View.VISIBLE
+                    fabRefresh.setOnClickListener { getGuestSessionId() }
+                    mainViewModel.getGuestSessionId!!.removeObserver(observerGuestSession!!)
+                }
+            }
+        }
+
+        mainViewModel.getGuestSessionId().observe(viewLifecycleOwner, observerGuestSession!!)
     }
 
     var observer : Observer <ApiResponse<TvShowResults>>? = null
@@ -52,10 +86,7 @@ class LatestFragment : Fragment() {
                 Status.LOADING ->{
                     Log.d(TAG,"Status.LOADING")
                     progressBar.visibility = View.VISIBLE
-                }
-                Status.STOP ->{
-                    Log.d(TAG,"Status.STOP")
-                    progressBar.visibility = View.GONE
+                    fabRefresh.visibility = View.GONE
                 }
                 Status.EMPTY ->{
                     Log.d(TAG,"Status.EMPTY")
@@ -71,7 +102,7 @@ class LatestFragment : Fragment() {
                     Log.d(TAG,"Status.ERROR")
                     progressBar.visibility = View.GONE
                     fabRefresh.visibility = View.VISIBLE
-
+                    fabRefresh.setOnClickListener { getLatestTvShows() }
                     latestViewModel.getLatestTvShows().removeObserver(observer!!)
                 }
             }
