@@ -1,5 +1,6 @@
-package com.nahdetmisr.adwaa.refator.koin
+package com.mohamedsayed.theair.koin
 
+import com.mohamedsayed.theair.viewmodel.FavouriteVModel
 import com.mohamedsayed.theair.viewmodel.LatestViewModel
 import com.mohamedsayed.theair.viewmodel.MainViewModel
 import com.mohamedsayed.theair.viewmodel.TvShowDetailsVModel
@@ -15,5 +16,8 @@ val viewModel = module {
     }
     single {
         MainViewModel(get())
+    }
+    single {
+        FavouriteVModel(get())
     }
 }

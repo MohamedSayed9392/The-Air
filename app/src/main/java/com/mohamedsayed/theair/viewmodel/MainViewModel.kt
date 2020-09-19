@@ -1,10 +1,10 @@
 package com.mohamedsayed.theair.viewmodel
 
-import GuestSession
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.mohamedsayed.theair.model.network.ApiResponse
 import com.mohamedsayed.theair.model.network.ApiService
+import com.mohamedsayed.theair.model.objects.GuestSession
 
 
 class MainViewModel(val apiService: ApiService) : ViewModel() {

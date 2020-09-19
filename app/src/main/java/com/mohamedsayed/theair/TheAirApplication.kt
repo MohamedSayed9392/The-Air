@@ -3,7 +3,8 @@ package com.mohamedsayed.theair
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.mohamedsayed.theair.koin.appModule
-import com.nahdetmisr.adwaa.refator.koin.viewModel
+import com.mohamedsayed.theair.koin.dbModule
+import com.mohamedsayed.theair.koin.viewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -32,7 +33,7 @@ class TheAirApplication : Application() {
     }
 
     private fun getModules(): List<Module> {
-        return listOf(viewModel, appModule)
+        return listOf(viewModel, appModule, dbModule)
     }
 
 }

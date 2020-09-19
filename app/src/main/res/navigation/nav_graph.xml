@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/latestFragment"
-        android:name="com.nahdetmisr.adwaa.view.dashboard.fragments.LatestFragment"
+        android:name="com.mohamedsayed.theair.view.latest.LatestFragment"
         android:label="LatestFragment" >
         <action
             android:id="@+id/action_latestFragment_to_tvShowDetailsFragment"
@@ -18,5 +18,11 @@
         <action
             android:id="@+id/action_tvShowDetailsFragment_to_tvShowDetailsFragment"
             app:destination="@id/tvShowDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.mohamedsayed.theair.view.favourite.FavouriteFragment"
+        android:label="FavouriteFragment">
     </fragment>
 </navigation>

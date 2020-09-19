@@ -1,7 +1,5 @@
 package com.mohamedsayed.theair.view.details
 
-import CreatedBy
-import Networks
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -16,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.mohamedsayed.theair.R
 import com.mohamedsayed.theair.helpers.Q
+import com.mohamedsayed.theair.model.objects.Networks
 import kotlinx.android.synthetic.main.networks_item_list.view.*
 
 class NetworkAdapter(val context: Context,

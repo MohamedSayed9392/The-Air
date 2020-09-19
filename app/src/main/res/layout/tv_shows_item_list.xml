@@ -33,6 +33,19 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/check_favourite"
+                    android:backgroundTint="@color/red"
+                    android:button="@null"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:id="@+id/tvShowFavCheck"
+                    app:layout_constraintEnd_toEndOf="@id/tvShowImPoster"
+                    app:layout_constraintBottom_toBottomOf="@id/tvShowImPoster"/>
+
                 <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

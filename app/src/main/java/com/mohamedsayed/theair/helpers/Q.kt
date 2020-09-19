@@ -3,7 +3,7 @@ package com.mohamedsayed.theair.helpers
 object Q {
 
     /*************** Apis **************/
-    const val API_TOKEN_V3 = "244e0b88ca3ed893d6b9181861e71988"
+    const val API_TOKEN_V3 = "Put TMDB Api Key Here"
 
     const val BASE_API = "https://api.themoviedb.org/3/"
 

@@ -1,6 +1,5 @@
 package com.mohamedsayed.theair.view.details
 
-import CreatedBy
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -15,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.mohamedsayed.theair.R
 import com.mohamedsayed.theair.helpers.Q
+import com.mohamedsayed.theair.model.objects.CreatedBy
 import kotlinx.android.synthetic.main.cast_item_list.view.*
 
 class CastAdapter(val context: Context,

@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="gold">#FFC107</color>
     <color name="gray_lite">#EFEFEF</color>
+    <color name="red">#DD1001</color>
 </resources>

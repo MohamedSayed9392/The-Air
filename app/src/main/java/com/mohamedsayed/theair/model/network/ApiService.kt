@@ -1,11 +1,9 @@
 package com.mohamedsayed.theair.model.network
 
-import DefaultResponse
-import GuestSession
-import TvShowDetails
-import TvShowResults
+
 import androidx.lifecycle.LiveData
 import com.mohamedsayed.theair.helpers.Q
+import com.mohamedsayed.theair.model.objects.*
 import retrofit2.http.*
 
 interface ApiService {

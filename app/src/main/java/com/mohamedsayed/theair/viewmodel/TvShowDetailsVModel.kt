@@ -1,14 +1,12 @@
 package com.mohamedsayed.theair.viewmodel
 
-import DefaultResponse
-import GuestSession
-import TvShowDetails
-import TvShowResults
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.mohamedsayed.theair.model.network.ApiResponse
 import com.mohamedsayed.theair.model.network.ApiService
-import com.mohamedsayed.theair.model.network.RetrofitService
+import com.mohamedsayed.theair.model.objects.DefaultResponse
+import com.mohamedsayed.theair.model.objects.TvShowDetails
+import com.mohamedsayed.theair.model.objects.TvShowResults
 
 
 class TvShowDetailsVModel(val apiService: ApiService) : ViewModel() {

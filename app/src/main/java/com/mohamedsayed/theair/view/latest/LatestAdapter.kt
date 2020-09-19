@@ -5,6 +5,9 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -15,10 +18,16 @@ import com.bumptech.glide.request.target.Target
 import com.mohamedsayed.theair.R
 import com.mohamedsayed.theair.helpers.Q
 import com.mohamedsayed.theair.model.objects.TvShow
+import com.mohamedsayed.theair.viewmodel.FavouriteVModel
+import kotlinx.android.synthetic.main.tv_show_details.*
 import kotlinx.android.synthetic.main.tv_shows_item_list.view.*
 
-class LatestAdapter(val context: Context,
-                    val list: List<TvShow>,val onItemClick:(TvShow)->Unit) : RecyclerView.Adapter<LatestAdapter.LatestAdapterHolder>() {
+class LatestAdapter(
+    val context: Context,
+    val list: List<TvShow>,
+    val onItemClick: (TvShow) -> Unit,
+    val onCheckedChangeListener: (TvShow,Boolean) -> Unit
+) : RecyclerView.Adapter<LatestAdapter.LatestAdapterHolder>() {
 
 
     inner class LatestAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,12 +36,15 @@ class LatestAdapter(val context: Context,
         val tvShowTxtRate = itemView.tvShowTxtRate
         val tvShowImPoster = itemView.tvShowImPoster
         val tvShowPBarImage = itemView.tvShowPBarImage
+        val tvShowFavCheck = itemView.tvShowFavCheck
 
         val tvShowLinData = itemView.tvShowLinData
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestAdapterHolder {
-        return LatestAdapterHolder(LayoutInflater.from(parent.context).inflate(R.layout.tv_shows_item_list, parent, false))
+        return LatestAdapterHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.tv_shows_item_list, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -52,22 +64,40 @@ class LatestAdapter(val context: Context,
 
         Glide.with(context).applyDefaultRequestOptions(
             RequestOptions()
-            .error(R.drawable.ic_refresh))
-            .load(String.format(Q.POSTER_URL_PATH,item.poster_path))
+                .error(R.drawable.ic_refresh)
+        )
+            .load(String.format(Q.POSTER_URL_PATH, item.poster_path))
             .fitCenter()
             .addListener(object : RequestListener<Drawable?> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable?>?, isFirstResource: Boolean): Boolean {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable?>?,
+                    isFirstResource: Boolean
+                ): Boolean {
                     e?.printStackTrace()
                     holder.tvShowPBarImage.visibility = View.GONE
                     return false
                 }
 
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable?>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable?>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
                     holder.tvShowPBarImage.visibility = View.GONE
                     return false
                 }
             })
             .into(holder.tvShowImPoster)
+
+        holder.tvShowFavCheck.visibility = View.VISIBLE
+        holder.tvShowFavCheck.isChecked = item.isFavourite
+        holder.tvShowFavCheck.setOnCheckedChangeListener { compoundButton, b ->
+            onCheckedChangeListener.invoke(item,b)
+        }
 
         holder.itemView.setOnClickListener {
             onItemClick.invoke(item)

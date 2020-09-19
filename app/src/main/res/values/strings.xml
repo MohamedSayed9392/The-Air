@@ -10,4 +10,7 @@
     <string name="rated_successfully">You\'ve Rated This TV Show Successfully</string>
     <string name="try_again">Try Again</string>
     <string name="similar_tv_shows">Similar TV Shows</string>
+    <string name="favourite_success">This TV Show Was Added To Favourites Successfully</string>
+    <string name="unfavourite_success">This TV Show Was Removed From Favourites Successfully</string>
+    <string name="favourites">Favourites</string>
 </resources>

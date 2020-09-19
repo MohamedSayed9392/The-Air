@@ -1,11 +1,5 @@
 package com.mohamedsayed.theair.view.details
 
-import CreatedBy
-import DefaultResponse
-import GuestSession
-import Networks
-import TvShowDetails
-import TvShowResults
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -31,9 +25,10 @@ import com.mohamedsayed.theair.R
 import com.mohamedsayed.theair.helpers.Q
 import com.mohamedsayed.theair.model.network.ApiResponse
 import com.mohamedsayed.theair.model.network.Status
-import com.mohamedsayed.theair.model.objects.TvShow
+import com.mohamedsayed.theair.model.objects.*
 import com.mohamedsayed.theair.view.MainActivity
 import com.mohamedsayed.theair.view.latest.LatestAdapter
+import com.mohamedsayed.theair.viewmodel.FavouriteVModel
 import com.mohamedsayed.theair.viewmodel.MainViewModel
 import com.mohamedsayed.theair.viewmodel.TvShowDetailsVModel
 import kotlinx.android.synthetic.main.tv_show_details.*
@@ -51,13 +46,14 @@ class TvShowDetailsFragment : Fragment() {
 
     val tvShowDetailsVModel : TvShowDetailsVModel by viewModel()
     val mainViewModel : MainViewModel by inject()
+    val favouriteVModel : FavouriteVModel by inject()
 
-    var tvShowId:Int = -1
+    var tvShow:TvShow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tvShowId = requireArguments().getInt(TV_SHOW_ID)
+        tvShow = requireArguments().getParcelable(TV_SHOW)!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -100,7 +96,7 @@ class TvShowDetailsFragment : Fragment() {
             }
         }
 
-        tvShowDetailsVModel.rateTvShow(tvShowId,value,guest_session_id).observe(viewLifecycleOwner, observerRate!!)
+        tvShowDetailsVModel.rateTvShow(tvShow!!.id,value,guest_session_id).observe(viewLifecycleOwner, observerRate!!)
     }
 
     var observer : Observer <ApiResponse<TvShowDetails>>? = null
@@ -125,15 +121,49 @@ class TvShowDetailsFragment : Fragment() {
                 Status.ERROR ->{
                     Log.d(TAG,"Status.ERROR")
                     tvSdProgressBar.visibility = View.GONE
-                    tvShowDetailsVModel.getTvShowDetails(tvShowId).removeObserver(observer!!)
+                    tvShowDetailsVModel.getTvShowDetails(tvShow!!.id).removeObserver(observer!!)
                 }
             }
         }
 
-        tvShowDetailsVModel.getTvShowDetails(tvShowId).observe(viewLifecycleOwner, observer!!)
+        tvShowDetailsVModel.getTvShowDetails(tvShow!!.id).observe(viewLifecycleOwner, observer!!)
+    }
+
+
+    var observerFavourite : Observer<Boolean?>? = null
+    var observerUnFavourite: Observer<Boolean?> ? = null
+    fun setupFavourite(){
+        observerFavourite = Observer {
+            it?.let {
+                Log.d(TAG,"insertFavourite : $it")
+                Toast.makeText(mContext!!,getString(R.string.favourite_success),Toast.LENGTH_LONG).show()
+                favouriteVModel.insertFavourite.removeObserver(observerFavourite!!)
+            }
+        }
+
+        observerUnFavourite = Observer {
+            it?.let {
+                Log.d(TAG,"deleteFavourite : $it")
+                Toast.makeText(mContext!!,getString(R.string.unfavourite_success),Toast.LENGTH_LONG).show()
+                favouriteVModel.deleteFavourite.removeObserver(observerUnFavourite!!)
+            }
+        }
+
+        tvSdFavCheck.isChecked = tvShow!!.isFavourite
+        tvSdFavCheck.setOnCheckedChangeListener { compoundButton, b ->
+            if(b){
+                favouriteVModel.insertFavourite(tvShow!!)
+                favouriteVModel.insertFavourite.observe(viewLifecycleOwner, observerFavourite!!)
+            }else{
+                favouriteVModel.deleteFavourite(tvShow!!)
+                favouriteVModel.deleteFavourite.observe(viewLifecycleOwner, observerUnFavourite!!)
+            }
+        }
     }
 
     fun updateUi(item: TvShowDetails){
+        setupFavourite()
+
         tvSdTxtTitle.text = item.name
         tvShowTxtRate.text = item.vote_average.toString()
         tvSdTxtEpsoide.text = item.number_of_episodes.toString()
@@ -232,26 +262,26 @@ class TvShowDetailsFragment : Fragment() {
                     progressBar3.visibility = View.GONE
                     fabRefresh3.visibility = View.VISIBLE
                     fabRefresh3.setOnClickListener { getTvShowSimilar() }
-                    tvShowDetailsVModel.getTvShowSimilar(tvShowId).removeObserver(observerTvShowsSimilar!!)
+                    tvShowDetailsVModel.getTvShowSimilar(tvShow!!.id).removeObserver(observerTvShowsSimilar!!)
                 }
             }
         }
 
-        tvShowDetailsVModel.getTvShowSimilar(tvShowId).observe(viewLifecycleOwner, observerTvShowsSimilar!!)
+        tvShowDetailsVModel.getTvShowSimilar(tvShow!!.id).observe(viewLifecycleOwner, observerTvShowsSimilar!!)
     }
 
     private fun setupList(list: List<TvShow>){
         recyclerView3.layoutManager = LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
         recyclerView3.adapter = SimilarAdapter(mContext!!,list) { item ->
             val args = Bundle()
-            args.putInt(TV_SHOW_ID, item.id)
+            args.putParcelable(TV_SHOW, item)
             findNavController().navigate(R.id.action_tvShowDetailsFragment_to_tvShowDetailsFragment, args)
         }
         recyclerView3.visibility = View.VISIBLE
     }
 
     companion object {
-        const val TV_SHOW_ID = "TV_SHOW_ID"
+        const val TV_SHOW = "TV_SHOW"
     }
 
     var mContext: MainActivity? = null

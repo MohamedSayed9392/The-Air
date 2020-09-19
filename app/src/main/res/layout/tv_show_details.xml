@@ -49,6 +49,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/check_favourite"
+                    android:backgroundTint="@color/red"
+                    android:button="@null"
+                    android:id="@+id/tvSdFavCheck"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
