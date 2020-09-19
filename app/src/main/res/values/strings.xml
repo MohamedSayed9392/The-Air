@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">The Air</string>
     <string name="no_data">No Data</string>
+    <string name="epsoide_number">Epsoide Number</string>
+    <string name="overview">Overview</string>
+    <string name="genre">Genre</string>
+    <string name="home_page">Home Page</string>
+    <string name="networks">Networks</string>
+    <string name="cast">Cast</string>
 </resources>

@@ -27,6 +27,8 @@ class LatestAdapter(val context: Context,
         val tvShowTxtRate = itemView.tvShowTxtRate
         val tvShowImPoster = itemView.tvShowImPoster
         val tvShowPBarImage = itemView.tvShowPBarImage
+
+        val tvShowLinData = itemView.tvShowLinData
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestAdapterHolder {
@@ -41,6 +43,8 @@ class LatestAdapter(val context: Context,
 
 
         val item = list[position]
+
+        holder.tvShowLinData.visibility = View.VISIBLE
 
         holder.tvShowTxtTitle.text = item.name
         holder.tvShowTxtDate.text = item.first_air_date

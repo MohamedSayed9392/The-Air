@@ -20,7 +20,7 @@ import com.mohamedsayed.theair.view.MainActivity
 import com.mohamedsayed.theair.view.details.TvShowDetailsFragment
 import com.mohamedsayed.theair.view.latest.LatestAdapter
 import com.mohamedsayed.theair.viewmodel.LatestViewModel
-import kotlinx.android.synthetic.main.tv_shows_list.*
+import kotlinx.android.synthetic.main.layout_recycler.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LatestFragment : Fragment() {
@@ -34,7 +34,7 @@ class LatestFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.tv_shows_list, container, false)
+        return inflater.inflate(R.layout.layout_recycler, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
