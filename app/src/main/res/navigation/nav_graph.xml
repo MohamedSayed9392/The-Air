@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/latestFragment">
+
+    <fragment
+        android:id="@+id/latestFragment"
+        android:name="com.nahdetmisr.adwaa.view.dashboard.fragments.LatestFragment"
+        android:label="LatestFragment" >
+        <action
+            android:id="@+id/action_latestFragment_to_tvShowDetailsFragment"
+            app:destination="@id/tvShowDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowDetailsFragment"
+        android:name="com.mohamedsayed.theair.view.details.TvShowDetailsFragment"
+        android:label="TvShowDetailsFragment" />
+</navigation>

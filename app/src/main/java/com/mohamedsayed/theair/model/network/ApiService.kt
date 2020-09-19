@@ -11,14 +11,14 @@ interface ApiService {
     fun getLatestTvShows(@Query("page") page:Int): LiveData<ApiResponse<TvShowResults>>
 
     @GET(Q.GET_TV_SHOW_DETAILS_API)
-    fun getTvShowDetails(@Path("tv_id") tv_id: Long): LiveData<ApiResponse<TvShowDetails>>
+    fun getTvShowDetails(@Path("tv_id") tv_id: Int): LiveData<ApiResponse<TvShowDetails>>
 
     @GET(Q.GET_TV_SHOW_SIMILAR_API)
-    fun getTvShowSimilar(@Path("tv_id") tv_id: Long): LiveData<ApiResponse<TvShowResults>>
+    fun getTvShowSimilar(@Path("tv_id") tv_id: Int): LiveData<ApiResponse<TvShowResults>>
 
     @POST(Q.RATE_TV_SHOW_API)
     fun rateTvShow(
-        @Path("tv_id") tv_id: Long,
+        @Path("tv_id") tv_id: Int,
         @Body value: Double
     ): LiveData<ApiResponse<String>>
 }

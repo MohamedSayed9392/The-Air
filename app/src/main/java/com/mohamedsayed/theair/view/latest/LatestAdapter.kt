@@ -18,7 +18,7 @@ import com.mohamedsayed.theair.model.objects.TvShow
 import kotlinx.android.synthetic.main.tv_shows_item_list.view.*
 
 class LatestAdapter(val context: Context,
-                    val list: List<TvShow>) : RecyclerView.Adapter<LatestAdapter.LatestAdapterHolder>() {
+                    val list: List<TvShow>,val onItemClick:(TvShow)->Unit) : RecyclerView.Adapter<LatestAdapter.LatestAdapterHolder>() {
 
 
     inner class LatestAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -64,6 +64,10 @@ class LatestAdapter(val context: Context,
                 }
             })
             .into(holder.tvShowImPoster)
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(item)
+        }
 
     }
 
