@@ -14,5 +14,9 @@
     <fragment
         android:id="@+id/tvShowDetailsFragment"
         android:name="com.mohamedsayed.theair.view.details.TvShowDetailsFragment"
-        android:label="TvShowDetailsFragment" />
+        android:label="TvShowDetailsFragment">
+        <action
+            android:id="@+id/action_tvShowDetailsFragment_to_tvShowDetailsFragment"
+            app:destination="@id/tvShowDetailsFragment" />
+    </fragment>
 </navigation>

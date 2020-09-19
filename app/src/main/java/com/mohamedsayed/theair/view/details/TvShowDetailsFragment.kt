@@ -5,6 +5,7 @@ import DefaultResponse
 import GuestSession
 import Networks
 import TvShowDetails
+import TvShowResults
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -38,7 +39,9 @@ import com.mohamedsayed.theair.viewmodel.TvShowDetailsVModel
 import kotlinx.android.synthetic.main.tv_show_details.*
 import kotlinx.android.synthetic.main.tv_shows_item_list.*
 import kotlinx.android.synthetic.main.layout_recycler.*
+import kotlinx.android.synthetic.main.layout_recycler.recyclerView
 import kotlinx.android.synthetic.main.layout_recycler_2.*
+import kotlinx.android.synthetic.main.layout_recycler_3.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -117,6 +120,7 @@ class TvShowDetailsFragment : Fragment() {
                     tvSdProgressBar.visibility = View.GONE
                     tvSdScrollView.visibility = View.VISIBLE
                     updateUi(it.data!!)
+                    getTvShowSimilar()
                 }
                 Status.ERROR ->{
                     Log.d(TAG,"Status.ERROR")
@@ -202,6 +206,48 @@ class TvShowDetailsFragment : Fragment() {
             recyclerView2.adapter = CastAdapter(mContext!!, list)
             recyclerView2.visibility = View.VISIBLE
         }
+    }
+
+    var observerTvShowsSimilar : Observer <ApiResponse<TvShowResults>>? = null
+    private fun getTvShowSimilar(){
+        observerTvShowsSimilar = Observer <ApiResponse<TvShowResults>>{
+            when(it.status){
+                Status.LOADING ->{
+                    Log.d(TAG,"Status.LOADING")
+                    progressBar3.visibility = View.VISIBLE
+                    fabRefresh3.visibility = View.GONE
+                }
+                Status.EMPTY ->{
+                    Log.d(TAG,"Status.EMPTY")
+                    progressBar3.visibility = View.GONE
+                    tvNoData3.visibility = View.VISIBLE
+                }
+                Status.SUCCESS ->{
+                    Log.d(TAG,"Status.SUCCESS")
+                    progressBar3.visibility = View.GONE
+                    setupList(it.data!!.results)
+                }
+                Status.ERROR ->{
+                    Log.d(TAG,"Status.ERROR")
+                    progressBar3.visibility = View.GONE
+                    fabRefresh3.visibility = View.VISIBLE
+                    fabRefresh3.setOnClickListener { getTvShowSimilar() }
+                    tvShowDetailsVModel.getTvShowSimilar(tvShowId).removeObserver(observerTvShowsSimilar!!)
+                }
+            }
+        }
+
+        tvShowDetailsVModel.getTvShowSimilar(tvShowId).observe(viewLifecycleOwner, observerTvShowsSimilar!!)
+    }
+
+    private fun setupList(list: List<TvShow>){
+        recyclerView3.layoutManager = LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
+        recyclerView3.adapter = SimilarAdapter(mContext!!,list) { item ->
+            val args = Bundle()
+            args.putInt(TV_SHOW_ID, item.id)
+            findNavController().navigate(R.id.action_tvShowDetailsFragment_to_tvShowDetailsFragment, args)
+        }
+        recyclerView3.visibility = View.VISIBLE
     }
 
     companion object {
