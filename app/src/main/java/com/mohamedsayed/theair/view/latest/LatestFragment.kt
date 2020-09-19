@@ -124,14 +124,17 @@ class LatestFragment : Fragment() {
     fun setupFavourite(list: List<TvShow>) {
         favouriteVModel.getFavouriteList()!!.observe(viewLifecycleOwner, {
             it?.let {
-                it.forEach {
-                    for (i in list.indices) {
-                        if (list[i].id == it.id) {
-                            list[i].isFavourite = true
-                            break
+                if(it.isEmpty())  setupList(list)
+                else {
+                    it.forEach {
+                        for (i in list.indices) {
+                            if (list[i].id == it.id) {
+                                list[i].isFavourite = true
+                                break
+                            }
                         }
+                        setupList(list)
                     }
-                    setupList(list)
                 }
             } ?: run {
                 setupList(list)

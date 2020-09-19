@@ -60,8 +60,13 @@ class FavouriteFragment : Fragment() {
     fun setupFavourite() {
         observerFavourites = Observer {
             it?.let {
-                setupList(it)
+                if(it.isEmpty()) tvNoData.visibility = View.VISIBLE
+                else {
+                    setupList(it)
+                }
                 favouriteVModel.getFavouriteList()!!.removeObserver(observerFavourites!!)
+            }?:run{
+                tvNoData.visibility = View.VISIBLE
             }
         }
 
